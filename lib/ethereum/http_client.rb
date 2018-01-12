@@ -10,12 +10,17 @@ module Ethereum
       raise ArgumentError unless ['http', 'https'].include? uri.scheme
       @host = uri.host
       @port = uri.port
+      if uri.request_uri == '/'
+        @path = ''
+      else
+        @path = uri.request_uri
+      end
       
       @ssl = uri.scheme == 'https'
       if ssl
-        @uri = URI("https://#{@host}:#{@port}")
+        @uri = URI("https://#{@host}:#{@port}#@path")
       else
-        @uri = URI("http://#{@host}:#{@port}")
+        @uri = URI("http://#{@host}:#{@port}#@path")
       end
     end
 
